@@ -5,3 +5,11 @@
 img.flavor {
     height: 42px
 }
+
+.vote-button {
+    background-color: green
+}
+
+.vote-button md-icon {
+    color: white
+}

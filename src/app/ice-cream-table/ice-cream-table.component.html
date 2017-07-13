@@ -19,9 +19,10 @@
     </ng-container>
 
     <!-- Voting Column -->
-    <ng-container cdkColumnDef="vote">
-      <md-header-cell *cdkHeaderCellDef> Name </md-header-cell>
-      <md-cell *cdkCellDef="let row"> {{row.name}} </md-cell>
+    <ng-container cdkColumnDef="like">
+      <md-header-cell *cdkHeaderCellDef> </md-header-cell>
+      <md-cell *cdkCellDef="let row"><button class="vote-button" md-mini-fab (click)='voteFor(row.$key)'>
+        <md-icon>thumb_up</md-icon></button></md-cell>
     </ng-container>
 
     <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>
