@@ -28,7 +28,7 @@ const VOTE_DELAY = 750;
       trigger('pulse', [
         state('in', style({background: 'white'})),
         transition('void => *', [
-          style({background: 'grey'}),
+          style({background: 'lightseagreen'}),
           animate('500ms ease-in')
         ]),
       ])

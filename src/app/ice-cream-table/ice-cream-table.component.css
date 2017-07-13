@@ -13,3 +13,9 @@ img.flavor {
 .vote-button md-icon {
     color: white
 }
+
+.add-button {
+    position: fixed;
+    right: 12px;
+    bottom: 12px;
+}
