@@ -18,6 +18,12 @@
       <md-cell *cdkCellDef="let row"> {{row.name}} </md-cell>
     </ng-container>
 
+    <!-- Voting Column -->
+    <ng-container cdkColumnDef="vote">
+      <md-header-cell *cdkHeaderCellDef> Name </md-header-cell>
+      <md-cell *cdkCellDef="let row"> {{row.name}} </md-cell>
+    </ng-container>
+
     <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>
     <md-row *cdkRowDef="let row; columns: displayedColumns;"></md-row>
   </md-table>

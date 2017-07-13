@@ -3,6 +3,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { MdCoreModule, MdTableModule } from '@angular/material';
 import { CdkTableModule } from '@angular/cdk';
+import { AngularFireModule } from 'angularfire2';
+import {AngularFireDatabaseModule} from 'angularfire2/database';
+import { environment } from '../environments/environment';
 
 import { AppComponent } from './app.component';
 import { IceCreamTableComponent } from './ice-cream-table/ice-cream-table.component';
@@ -24,7 +27,9 @@ export class IceCreamMaterialModule {}
   imports: [
     BrowserModule,
     IceCreamMaterialModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireDatabaseModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {DataSource} from '@angular/cdk';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {Observable} from 'rxjs/Observable';
+import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 
 @Component({
   selector: 'app-ice-cream-table',
@@ -12,10 +13,10 @@ export class IceCreamTableComponent implements OnInit {
   dataSource: FlavorDataSource | null;
   displayedColumns = ['votes', 'image', 'name'];
 
-  constructor() { }
+  constructor(private db: AngularFireDatabase) { }
 
   ngOnInit() {
-    this.dataSource = new FlavorDataSource();
+    this.dataSource = new FlavorDataSource(this.db);
   }
 
 }
@@ -26,22 +27,16 @@ export interface FlavorData {
   name: string;
 }
 
-const FLAVORS: FlavorData[] = [
-  {votes: 20, imageUrl: '/assets/americone_dream.jpg', name: 'Americone Dream'},
-  {votes: 10, imageUrl: '/assets/rocky_road.jpg', name: 'Rocky Road'},
-];
-
 export class FlavorDataSource extends DataSource<any> {
   dataChange: BehaviorSubject<FlavorData[]> = new BehaviorSubject<FlavorData[]>([]);
 
-  constructor() {
+  constructor(private db: AngularFireDatabase) {
     super();
-    this.dataChange.next(FLAVORS);
   }
 
   /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect(): Observable<FlavorData[]> {
-    return this.dataChange;
+    return this.db.list('/flavors');
   }
 
   disconnect() {}
