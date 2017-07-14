@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import {DataSource} from '@angular/cdk';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {Observable} from 'rxjs/Observable';
+import {Observable } from 'rxjs/Observable';
+import {GroupedObservable} from 'rxjs/operator/groupBy';
 import {Subscription} from 'rxjs/Subscription';
 import {Subject} from 'rxjs/Subject';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
@@ -18,6 +19,7 @@ import {
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/throttleTime';
 import 'rxjs/add/operator/delay';
+import 'rxjs/add/operator/groupBy';
 
 const VOTE_DELAY = 750;
 
@@ -30,7 +32,7 @@ const VOTE_DELAY = 750;
         state('in', style({background: 'white'})),
         transition('void => *', [
           style({background: 'lightseagreen'}),
-          animate('500ms ease-in')
+          animate('350ms ease-out')
         ]),
       ])
   ]
@@ -48,10 +50,13 @@ export class IceCreamTableComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.dataSource = new FlavorDataSource(this.db);
-    this.voteSub = this.vote$.throttleTime(VOTE_DELAY).subscribe((id: number) => {
-      const ref = this.db.database.ref(`/flavors/${id}/votes`);
-      ref.transaction((currentVotes) => currentVotes + 1);
-      this.disabled[id] = true;
+    this.voteSub = this.vote$.groupBy(s => s).subscribe((value: any) => {
+      const id = value.key;
+      value.throttleTime(VOTE_DELAY - 250).subscribe(() => {
+        const ref = this.db.database.ref(`/flavors/${id}/votes`);
+        ref.transaction((currentVotes) => currentVotes + 1);
+        this.disabled[id] = true;
+      });
     });
 
     this.vote$.delay(VOTE_DELAY).forEach((id) => {
