@@ -3,7 +3,7 @@
     <!-- Votes Column -->
     <ng-container cdkColumnDef="votes">
       <md-header-cell *cdkHeaderCellDef> Votes </md-header-cell>
-      <md-cell *cdkCellDef="let row"> {{row.votes}} </md-cell>
+      <md-cell class="votes" *cdkCellDef="let row"> {{row.votes}} </md-cell>
     </ng-container>
 
     <!-- Image Column -->
@@ -21,9 +21,10 @@
     <!-- Voting Column -->
     <ng-container cdkColumnDef="like">
       <md-header-cell *cdkHeaderCellDef> </md-header-cell>
-      <md-cell *cdkCellDef="let row">
+      <md-cell class="buttons-container" *cdkCellDef="let row">
         <button [disabled]="disabled[row.$key]" class="vote-button" md-mini-fab (click)='vote.next(row.$key)'>
-          <md-icon>thumb_up</md-icon></button></md-cell>
+          <md-icon>thumb_up</md-icon></button>
+        </md-cell>
     </ng-container>
 
     <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>

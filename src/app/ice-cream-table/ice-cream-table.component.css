@@ -10,6 +10,17 @@ img.flavor {
     background-color: green
 }
 
+.votes {
+    font-size: 1.7em;
+    font-weight: 6; 
+}
+
+.buttons-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
 .vote-button md-icon {
     color: white
 }
