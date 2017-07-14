@@ -54,7 +54,7 @@ export class IceCreamMaterialModule { }
     BrowserAnimationsModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
-    RouterModule.forRoot(appRoutes, { enableTracing: false })
+    RouterModule.forRoot(appRoutes, { useHash: true})
   ],
   providers: [],
   bootstrap: [AppComponent]
