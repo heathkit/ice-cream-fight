@@ -28,7 +28,7 @@
     </ng-container>
 
     <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>
-    <md-row [@pulse]="'in'" *cdkRowDef="let row; columns: displayedColumns;"></md-row>
+    <md-row [@pulse]="pulseState" *cdkRowDef="let row; columns: displayedColumns;"></md-row>
   </md-table>
 </div>
 

@@ -14,8 +14,6 @@ import {
   transition
 } from '@angular/animations';
 
-
-// Needed to use on the flavor list!
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/throttleTime';
 import 'rxjs/add/operator/delay';
@@ -30,7 +28,7 @@ const VOTE_DELAY = 750;
   animations: [
     trigger('pulse', [
       state('in', style({ background: 'white' })),
-      transition('void => *', [
+      transition('void => in', [
         style({ background: 'lightseagreen' }),
         animate('350ms ease-out')
       ]),
@@ -42,6 +40,7 @@ export class IceCreamTableComponent implements OnInit, OnDestroy {
   displayedColumns = ['votes', 'image', 'name', 'like'];
   private vote = new Subject<any>();
   vote$ = this.vote.asObservable();
+  pulseState = '';
   disabled: { [key: number]: boolean } = {};
 
   voteSub: Subscription;
@@ -53,6 +52,11 @@ export class IceCreamTableComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.dataSource = new FlavorDataSource(this.db);
     }, 1);
+
+    // Enable update pulses after 3s, so the initial load doesn't flash.
+    setTimeout(() => {
+      this.pulseState = 'in';
+    }, 3000);
 
     this.voteSub = this.vote$.groupBy(s => s).subscribe((value: any) => {
       const id = value.key;
