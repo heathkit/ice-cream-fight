@@ -1,7 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import { MdCoreModule, MdTableModule, MdButtonModule, MdIconModule } from '@angular/material';
+import { FormsModule } from '@angular/forms';
+import { MdCoreModule, MdInputModule, MdTableModule, MdButtonModule, MdIconModule } from '@angular/material';
 import { CdkTableModule } from '@angular/cdk';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
@@ -21,7 +22,8 @@ const appRoutes: Routes = [
     path: 'flavors',
     component: IceCreamTableComponent,
   },
-  { path: '',
+  {
+    path: '',
     redirectTo: '/flavors',
     pathMatch: 'full'
   }
@@ -34,6 +36,7 @@ const appRoutes: Routes = [
     MdTableModule,
     MdButtonModule,
     MdIconModule,
+    MdInputModule
   ]
 })
 export class IceCreamMaterialModule { }
@@ -47,10 +50,11 @@ export class IceCreamMaterialModule { }
   imports: [
     BrowserModule,
     IceCreamMaterialModule,
+    FormsModule,
     BrowserAnimationsModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
-    RouterModule.forRoot(appRoutes, {enableTracing: true} )
+    RouterModule.forRoot(appRoutes, { enableTracing: false })
   ],
   providers: [],
   bootstrap: [AppComponent]
