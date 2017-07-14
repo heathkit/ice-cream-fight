@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {DataSource} from '@angular/cdk';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {Observable} from 'rxjs/Observable';
+import {Subscription} from 'rxjs/Subscription';
 import {Subject} from 'rxjs/Subject';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import {
@@ -34,18 +35,20 @@ const VOTE_DELAY = 750;
       ])
   ]
 })
-export class IceCreamTableComponent implements OnInit {
+export class IceCreamTableComponent implements OnInit, OnDestroy {
   dataSource: FlavorDataSource | null;
   displayedColumns = ['votes', 'image', 'name', 'like'];
   private vote = new Subject<any>();
   vote$ = this.vote.asObservable();
   disabled: {[key: number]: boolean} = {};
 
+  voteSub: Subscription;
+
   constructor(private db: AngularFireDatabase) { }
 
   ngOnInit() {
     this.dataSource = new FlavorDataSource(this.db);
-    this.vote$.throttleTime(VOTE_DELAY).subscribe((id: number) => {
+    this.voteSub = this.vote$.throttleTime(VOTE_DELAY).subscribe((id: number) => {
       const ref = this.db.database.ref(`/flavors/${id}/votes`);
       ref.transaction((currentVotes) => currentVotes + 1);
       this.disabled[id] = true;
@@ -54,6 +57,10 @@ export class IceCreamTableComponent implements OnInit {
     this.vote$.delay(VOTE_DELAY).forEach((id) => {
       this.disabled[id] = false;
     });
+  }
+
+  ngOnDestroy() {
+    this.voteSub.unsubscribe();
   }
 }
 
@@ -64,14 +71,9 @@ export interface FlavorData {
 }
 
 export class FlavorDataSource extends DataSource<any> {
-  dataChange: BehaviorSubject<FlavorData[]> = new BehaviorSubject<FlavorData[]>([]);
-
   constructor(private db: AngularFireDatabase) {
     super();
-    this.votesSubject = new Subject<any>();
   }
-
-  votesSubject: Subject<any>;
 
   /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect(): Observable<FlavorData[]> {
@@ -80,5 +82,6 @@ export class FlavorDataSource extends DataSource<any> {
     return flavorList;
   }
 
-  disconnect() {}
+  disconnect() {
+  }
 }
