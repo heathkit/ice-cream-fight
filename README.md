@@ -1,3 +1,12 @@
+# TODO
+
+- Fix header CSS
+- limit possible ice cream images
+- After adding flavor, redirect and show toast
+- Update readme and guide
+- create outline for steps, move into slides
+- redo repo history
+
 # IceCreamFight
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.2.1.

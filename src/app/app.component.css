@@ -2,7 +2,16 @@
     height: 60px;
     background: lightgoldenrodyellow;
     margin: 6px;
+    font-family: 'Press Start 2P', cursive;
 }
+/*
+font-family: 'Press Start 2P', cursive;
+font-family: 'Bungee Inline', cursive;
+font-family: 'VT323', monospace;
+font-family: 'Black Ops One', cursive;
+font-family: 'Audiowide', cursive;
+font-family: 'Faster One', cursive;
+*/
 
 .logo {
     height: 100%
