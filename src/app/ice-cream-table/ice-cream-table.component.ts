@@ -78,7 +78,7 @@ export class FlavorDataSource extends DataSource<any> {
   /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect(): Observable<FlavorData[]> {
     const flavorList = this.db.list('/flavors', {query: {orderByChild: 'votes'}})
-      .map((array) => array.reverse()) as FirebaseListObservable<FlavorData[]>;
+      .map((array) => array.slice().reverse() ) as FirebaseListObservable<FlavorData[]>;
     return flavorList;
   }
 
