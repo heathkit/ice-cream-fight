@@ -1,6 +1,5 @@
 # TODO
 
-- Fix header CSS
 - limit possible ice cream images
 - After adding flavor, redirect and show toast
 - Update readme and guide

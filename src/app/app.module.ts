@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MdCoreModule, MdInputModule, MdTableModule, MdButtonModule, MdIconModule } from '@angular/material';
+import { MdCoreModule, MdInputModule, MdTableModule, MdToolbarModule, MdButtonModule, MdIconModule } from '@angular/material';
 import { CdkTableModule } from '@angular/cdk';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
@@ -36,7 +36,8 @@ const appRoutes: Routes = [
     MdTableModule,
     MdButtonModule,
     MdIconModule,
-    MdInputModule
+    MdInputModule,
+    MdToolbarModule
   ]
 })
 export class IceCreamMaterialModule { }
