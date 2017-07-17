@@ -10,7 +10,6 @@ import { IceCreamTableComponent } from './ice-cream-table.component';
 import { FlavorService, FlavorData } from './../flavor.service';
 
 import 'rxjs/add/observable/of';
-import 'rxjs/add/observable/from';
 
 const STATIC_DATA = [
   { 'votes': 20, 'imageUrl': '/assets/americone_dream.jpg', 'name': 'Americone Dream', '$key': 1 },
@@ -24,13 +23,12 @@ describe('IceCreamTableComponent', () => {
   const listSub = new Subject<any>();
   const addVoteSpy = jasmine.createSpy('addVote');
   const getFlavorsSpy = jasmine.createSpy('getFlavors').and.callFake(() => {
-    console.log('In Spy');
-    return Observable.from([STATIC_DATA]);
+    return listSub.asObservable();
   });
 
   const fakeFlavorService: any = {
     getFlavors: getFlavorsSpy,
-    addVoteSpy: addVoteSpy
+    addVote: addVoteSpy
   };
 
   beforeEach(async(() => {
@@ -42,23 +40,20 @@ describe('IceCreamTableComponent', () => {
       imports: [IceCreamMaterialModule, NoopAnimationsModule, MdTableModule]
     })
       .compileComponents();
-      console.log('Compiled');
   }));
 
-  beforeEach(() => {
+  beforeEach(async(() => {
     getFlavorsSpy.calls.reset();
     addVoteSpy.calls.reset();
     fixture = TestBed.createComponent(IceCreamTableComponent);
-    component = fixture.componentInstance;
     fixture.autoDetectChanges();
-  });
+    component = fixture.componentInstance;
+  }));
 
-  fit('should display the flavors', fakeAsync(() => {
+  it('should display the flavors', fakeAsync(() => {
     listSub.next(STATIC_DATA);
-    tick(100);
     fixture.detectChanges();
     tick(100);
-    console.log('Almost done');
 
     const rows = fixture.nativeElement.querySelectorAll('md-row');
     expect(getFlavorsSpy).toHaveBeenCalled();

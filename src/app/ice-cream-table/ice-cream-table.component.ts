@@ -1,5 +1,5 @@
 import { FlavorService, FlavorData } from './../flavor.service';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { DataSource } from '@angular/cdk';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
@@ -46,18 +46,23 @@ export class IceCreamTableComponent implements OnInit, OnDestroy {
 
   voteSub: Subscription;
 
-  constructor(private service: FlavorService) { }
+  constructor(private service: FlavorService, private ngZone: NgZone) { }
 
   ngOnInit() {
     // Workaround for https://github.com/angular/material2/issues/5593
     setTimeout(() => {
       this.dataSource = new FlavorDataSource(this.service);
-    }, 1);
+    }, 0);
 
     // Enable update pulses after 3s, so the initial load doesn't flash.
-    setTimeout(() => {
-      this.pulseState = 'in';
-    }, 3000);
+    // This is run outside the Angular zone so it doesn't block testing.
+    this.ngZone.runOutsideAngular(() => {
+      setTimeout(() => {
+        // The callback needs to be run inside the Angular zone so the change
+        // is picked up.
+        this.ngZone.run(() => this.pulseState = 'in');
+      }, 3000);
+    });
 
     this.voteSub = this.vote$.groupBy(s => s).subscribe((value: any) => {
       const id = value.key;

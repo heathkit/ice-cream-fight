@@ -26,11 +26,11 @@ describe('NewFlavorComponent', () => {
       .compileComponents();
   }));
 
-  beforeEach(() => {
+  beforeEach(async(() => {
     fixture = TestBed.createComponent(NewFlavorComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    fixture.autoDetectChanges();
+  }));
 
   xit('should be created', () => {
     expect(component).toBeTruthy();
