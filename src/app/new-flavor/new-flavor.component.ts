@@ -1,6 +1,8 @@
+import { Router } from '@angular/router';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { FlavorService } from '../flavor.service';
 
 @Component({
   selector: 'app-new-flavor',
@@ -11,18 +13,14 @@ export class NewFlavorComponent implements OnInit {
   @ViewChild(NgForm)
   private form: NgForm;
 
-  constructor(private db: AngularFireDatabase) { }
+  constructor(private service: FlavorService, private router: Router) { }
 
   ngOnInit() {
   }
 
   addFlavor() {
-    const res = this.db.database.ref('/flavors').push({
-      name: this.form.value['flavorName'],
-      imageUrl: this.form.value['imageUrl'],
-      votes: 0
-    });
-    console.log(res);
+    this.service.addFlavor(this.form.value['flavorName'], this.form.value['imageUrl']);
+    this.router.navigate(['/']);
   }
 
 }

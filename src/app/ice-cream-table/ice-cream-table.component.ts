@@ -1,3 +1,4 @@
+import { FlavorService, FlavorData } from './../flavor.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DataSource } from '@angular/cdk';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -38,19 +39,19 @@ const VOTE_DELAY = 750;
 export class IceCreamTableComponent implements OnInit, OnDestroy {
   dataSource: FlavorDataSource | null;
   displayedColumns = ['votes', 'image', 'name', 'like'];
-  private vote = new Subject<any>();
-  vote$ = this.vote.asObservable();
+  public vote = new Subject<any>();
+  public vote$ = this.vote.asObservable();
   pulseState = '';
   disabled: { [key: number]: boolean } = {};
 
   voteSub: Subscription;
 
-  constructor(private db: AngularFireDatabase) { }
+  constructor(private service: FlavorService) { }
 
   ngOnInit() {
     // Workaround for https://github.com/angular/material2/issues/5593
     setTimeout(() => {
-      this.dataSource = new FlavorDataSource(this.db);
+      this.dataSource = new FlavorDataSource(this.service);
     }, 1);
 
     // Enable update pulses after 3s, so the initial load doesn't flash.
@@ -61,8 +62,7 @@ export class IceCreamTableComponent implements OnInit, OnDestroy {
     this.voteSub = this.vote$.groupBy(s => s).subscribe((value: any) => {
       const id = value.key;
       value.throttleTime(VOTE_DELAY - 250).subscribe(() => {
-        const ref = this.db.database.ref(`/flavors/${id}/votes`);
-        ref.transaction((currentVotes) => currentVotes + 1);
+        this.service.addVote(id);
         this.disabled[id] = true;
       });
     });
@@ -77,22 +77,14 @@ export class IceCreamTableComponent implements OnInit, OnDestroy {
   }
 }
 
-export interface FlavorData {
-  votes: number;
-  imageUrl: string;
-  name: string;
-}
-
 export class FlavorDataSource extends DataSource<any> {
-  constructor(private db: AngularFireDatabase) {
+  constructor(private service: FlavorService) {
     super();
   }
 
   /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect(): Observable<FlavorData[]> {
-    const flavorList = this.db.list('/flavors', { query: { orderByChild: 'votes' } })
-      .map((array) => array.slice().reverse()) as FirebaseListObservable<FlavorData[]>;
-    return flavorList;
+    return this.service.getFlavors();
   }
 
   disconnect() {
